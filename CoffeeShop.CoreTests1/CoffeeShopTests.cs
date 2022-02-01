@@ -1,31 +1,32 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using CoffeeShop.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CoffeeShop.Core.Tests
 {
-    [TestClass()]
+    [TestClass]
     public class CoffeeShopTests
     {
-        [TestMethod()]
+        [TestMethod]
         public void AddCustomerTest()
         {
-
-            var drink = new Drink("Americano")
+            try
             {
-                BaseCost = 50,
-                BasePrice = 100,
-                LoyaltyPointsGained = 5
-            };
+                var drink = new Drink("Americano")
+                {
+                    BaseCost = 50,
+                    BasePrice = 100,
+                    LoyaltyPointsGained = 5
+                };
 
-          var  coffeeShop = new Core.CoffeeShop(drink);
-
-      //      coffeeShop.AddCustomer(new Customer());
-
+                var coffeeShop = new CoffeeShop(drink);
+                Assert.IsTrue(true);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(
+                    $"Unexpected exception of type {e.GetType()} caught: {e.Message}"
+                );
+            }
         }
     }
 }

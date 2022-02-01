@@ -5,7 +5,7 @@ namespace CoffeeShop.Console
 {
     public class Program
     {
-        static Core.CoffeeShop _coffeeShop;
+        private static Core.CoffeeShop _coffeeShop;
 
         private static void Main()
         {
@@ -28,29 +28,17 @@ namespace CoffeeShop.Console
         private void ProcessInput(string enteredText)
         {
             if (enteredText.Contains("print summary"))
-            {
                 PrintSummary();
-            }
             else if (enteredText.Contains("add general"))
-            {
                 AddGeneral();
-            }
             else if (enteredText.Contains("add loyalty"))
-            {
                 AddLoyalty(enteredText);
-            }
             else if (enteredText.Contains("add employee"))
-            {
                 AddEmployee();
-            }
             else if (enteredText.Contains("exit"))
-            {
                 Exit();
-            }
             else
-            {
                 UnknownInput();
-            }
         }
 
         private void UnknownInput()
@@ -71,6 +59,8 @@ namespace CoffeeShop.Console
             {
                 Type = CustomerType.CoffeeEmployee
             });
+
+            System.Console.WriteLine("Entry added... ");
         }
 
         public void AddLoyalty(string enteredText)
@@ -82,6 +72,8 @@ namespace CoffeeShop.Console
                 LoyaltyPoints = Convert.ToInt32(segments[3]),
                 IsUsingLoyaltyPoints = Convert.ToBoolean(segments[4])
             });
+
+            System.Console.WriteLine("Entry added... ");
         }
 
         public void AddGeneral()
@@ -90,6 +82,7 @@ namespace CoffeeShop.Console
             {
                 Type = CustomerType.General
             });
+            System.Console.WriteLine("Entry added... ");
         }
 
         public void PrintSummary()
@@ -124,7 +117,7 @@ namespace CoffeeShop.Console
 
         public double CustomerCount()
         {
-            return _coffeeShop.Customers.Count;
+            return _coffeeShop.TotalCustomers();
         }
     }
 }

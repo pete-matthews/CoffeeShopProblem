@@ -1,5 +1,4 @@
 ﻿using System;
-using CoffeeShop.Console;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CoffeeShop.Console.Tests
@@ -7,19 +6,18 @@ namespace CoffeeShop.Console.Tests
     [TestClass]
     public class ProgramTests
     {
-        Program prg;
+        private Program prg;
+
         [TestInitialize]
         public void Initialize()
         {
             prg = new Program();
-           
         }
 
 
-        [TestMethod()]
+        [TestMethod]
         public void SetupDataTest()
         {
-
             try
             {
                 prg.SetupData();
@@ -31,10 +29,7 @@ namespace CoffeeShop.Console.Tests
                     $"Unexpected exception of type {e.GetType()} caught: {e.Message}"
                 );
             }
-
         }
-
-
 
 
         [TestMethod]
@@ -43,15 +38,14 @@ namespace CoffeeShop.Console.Tests
             prg.AddLoyalty("add loyalty Craig 0 false");
             var income = prg.IncomeFromDrinks();
             Assert.AreEqual(income, 100);
-
         }
+
         [TestMethod]
         public void AddLoyaltyTestCost()
         {
             prg.AddLoyalty("add loyalty Craig 0 false");
             var cost = prg.CostOfDrinks();
             Assert.AreEqual(cost, 50);
-
         }
 
 
@@ -61,26 +55,26 @@ namespace CoffeeShop.Console.Tests
             prg.AddLoyalty("add loyalty Damian 1000 true");
             var income = prg.IncomeFromDrinks();
             Assert.AreEqual(income, 100);
-
         }
+
         [TestMethod]
         public void AddLoyaltyUseLoyaltyTestCost()
         {
             prg.AddLoyalty("add loyalty Damian 1000 true");
             var cost = prg.CostOfDrinks();
             Assert.AreEqual(cost, 50);
-
         }
 
 
-        [TestMethod()]
+        [TestMethod]
         public void AddGeneralTestIncome()
         {
             prg.AddGeneral();
             var income = prg.IncomeFromDrinks();
             Assert.AreEqual(income, 100 * prg.CustomerCount());
         }
-        [TestMethod()]
+
+        [TestMethod]
         public void AddGeneralTestCost()
         {
             prg.AddGeneral();
@@ -89,21 +83,20 @@ namespace CoffeeShop.Console.Tests
         }
 
 
-        [TestMethod()]
+        [TestMethod]
         public void AddEmployeeTestIncome()
         {
             prg.AddEmployee();
             var income = prg.IncomeFromDrinks();
             Assert.AreEqual(income, 100 * prg.CustomerCount());
         }
-        [TestMethod()]
+
+        [TestMethod]
         public void AddEmployeeTestCost()
         {
             prg.AddGeneral();
             var cost = prg.CostOfDrinks();
             Assert.AreEqual(cost, 50 * prg.CustomerCount());
         }
-
-      
     }
 }

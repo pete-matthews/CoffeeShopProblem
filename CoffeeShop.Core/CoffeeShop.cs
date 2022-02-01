@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace CoffeeShop.Core
 {
-    public class CoffeeShop 
+    public class CoffeeShop
     {
         private const string Indentation = "    ";
         private readonly string _newLine = Environment.NewLine;
@@ -24,7 +24,6 @@ namespace CoffeeShop.Core
             Customers.Add(customer);
         }
 
-        
 
         public double IncomeFromDrinks()
         {
@@ -36,46 +35,37 @@ namespace CoffeeShop.Core
         {
             return Customers.Sum(customer => Drink.BaseCost);
         }
+
         public double TotalLoyaltyPointsAccrued()
         {
             return Customers.Sum(customer => Drink.LoyaltyPointsGained);
         }
 
+        public int TotalCustomers()
+        {
+            return Customers.Count;
+        }
 
         public string GetSummary()
         {
-        
-          
             var totalLoyaltyPointsRedeemed = 0;
-            var totalCustomers = 0;
-
-            var result = "Coffee Shop Summary";
-
+            
             foreach (var customer in Customers)
-            {
                 if (customer.Type == CustomerType.LoyaltyMember)
-                {
                     if (customer.IsUsingLoyaltyPoints)
                     {
                         var loyaltyPointsRedeemed = Convert.ToInt32(Math.Ceiling(Drink.BasePrice));
                         customer.LoyaltyPoints -= loyaltyPointsRedeemed;
                         totalLoyaltyPointsRedeemed += loyaltyPointsRedeemed;
                     }
-                }
-                else
-                {
-                    throw new ArgumentOutOfRangeException();
-                }
 
-
-                totalCustomers++;
-            }
-
-            return BuildSummary(result, totalCustomers, totalLoyaltyPointsRedeemed);
+            return BuildSummary( TotalCustomers(), totalLoyaltyPointsRedeemed);
         }
 
-        private string BuildSummary(string result, int totalCustomers, int totalLoyaltyPointsRedeemed)
+        private string BuildSummary( int totalCustomers, int totalLoyaltyPointsRedeemed)
         {
+            
+            var result = "Coffee Shop Summary";
             result += _verticalWhiteSpace;
 
             result += "Total customers: " + totalCustomers;
@@ -112,5 +102,4 @@ namespace CoffeeShop.Core
             return result;
         }
     }
-   
 }
