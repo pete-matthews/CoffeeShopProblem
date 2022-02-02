@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using CoffeeShop.Core;
 
 namespace CoffeeShop.Console
@@ -33,8 +34,10 @@ namespace CoffeeShop.Console
                 AddGeneral();
             else if (enteredText.Contains("add loyalty"))
                 AddLoyalty(enteredText);
+            else if (enteredText.Contains("add student"))
+                AddStudent(enteredText);
             else if (enteredText.Contains("add employee"))
-                AddEmployee();
+                AddEmployee(enteredText);
             else if (enteredText.Contains("exit"))
                 Exit();
             else
@@ -53,11 +56,31 @@ namespace CoffeeShop.Console
             Environment.Exit(1);
         }
 
-        public void AddEmployee()
+        private bool HasEmployeeHadDrinkLimit(string employee)
         {
+
+         var output =   _coffeeShop.Customers.Count(customer => customer.Title == employee);
+         return output >= 2;
+        }
+        public void AddEmployee(string enteredText)
+        {
+            var segments = enteredText.Split(' ');
+            if (segments.Length < 2)
+            {
+                System.Console.WriteLine("One or more fields missing");
+                return;
+            }
+       
+
+            if (HasEmployeeHadDrinkLimit(segments[2]))
+            {
+                System.Console.WriteLine("Employee drink limit exceeded");
+                return;
+            }
             _coffeeShop.AddCustomer(new Customer
             {
-                Type = CustomerType.CoffeeEmployee
+                Type = CustomerType.CoffeeEmployee,
+                Title = segments[2]
             });
 
             System.Console.WriteLine("Entry added... ");
@@ -69,8 +92,24 @@ namespace CoffeeShop.Console
             _coffeeShop.AddCustomer(new Customer
             {
                 Type = CustomerType.LoyaltyMember,
+                Title = segments[2],
                 LoyaltyPoints = Convert.ToInt32(segments[3]),
                 IsUsingLoyaltyPoints = Convert.ToBoolean(segments[4])
+            });
+
+            System.Console.WriteLine("Entry added... ");
+        }
+
+        public void AddStudent(string enteredText)
+        {
+            var segments = enteredText.Split(' ');
+            _coffeeShop.AddCustomer(new Customer
+            {
+                Type = CustomerType.Student,
+                LoyaltyPoints = 0,
+                Title = segments[2],
+                IsUsingLoyaltyPoints = false,
+                DiscountPercentage = 75
             });
 
             System.Console.WriteLine("Entry added... ");
@@ -97,7 +136,8 @@ namespace CoffeeShop.Console
             {
                 BaseCost = 50,
                 BasePrice = 100,
-                LoyaltyPointsGained = 5
+                LoyaltyPointsGained = 5,
+                DiscountPrice = 75
             };
 
             _coffeeShop = new Core.CoffeeShop(drink);

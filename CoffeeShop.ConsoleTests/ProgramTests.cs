@@ -12,6 +12,7 @@ namespace CoffeeShop.Console.Tests
         public void Initialize()
         {
             prg = new Program();
+
         }
 
 
@@ -52,6 +53,7 @@ namespace CoffeeShop.Console.Tests
         [TestMethod]
         public void AddLoyaltyUseLoyaltyTestIncome()
         {
+            prg.SetupData();
             prg.AddLoyalty("add loyalty Damian 1000 true");
             var income = prg.IncomeFromDrinks();
             Assert.AreEqual(income, 100);
@@ -60,6 +62,7 @@ namespace CoffeeShop.Console.Tests
         [TestMethod]
         public void AddLoyaltyUseLoyaltyTestCost()
         {
+            prg.SetupData();
             prg.AddLoyalty("add loyalty Damian 1000 true");
             var cost = prg.CostOfDrinks();
             Assert.AreEqual(cost, 50);
@@ -69,6 +72,7 @@ namespace CoffeeShop.Console.Tests
         [TestMethod]
         public void AddGeneralTestIncome()
         {
+            prg.SetupData();
             prg.AddGeneral();
             var income = prg.IncomeFromDrinks();
             Assert.AreEqual(income, 100 * prg.CustomerCount());
@@ -77,6 +81,7 @@ namespace CoffeeShop.Console.Tests
         [TestMethod]
         public void AddGeneralTestCost()
         {
+            prg.SetupData();
             prg.AddGeneral();
             var cost = prg.CostOfDrinks();
             Assert.AreEqual(cost, 50 * prg.CustomerCount());
@@ -86,7 +91,8 @@ namespace CoffeeShop.Console.Tests
         [TestMethod]
         public void AddEmployeeTestIncome()
         {
-            prg.AddEmployee();
+            prg.SetupData();
+            prg.AddEmployee("Andrzej");
             var income = prg.IncomeFromDrinks();
             Assert.AreEqual(income, 100 * prg.CustomerCount());
         }
@@ -94,7 +100,8 @@ namespace CoffeeShop.Console.Tests
         [TestMethod]
         public void AddEmployeeTestCost()
         {
-            prg.AddGeneral();
+            prg.SetupData();
+            prg.AddEmployee("Andrzej");
             var cost = prg.CostOfDrinks();
             Assert.AreEqual(cost, 50 * prg.CustomerCount());
         }
