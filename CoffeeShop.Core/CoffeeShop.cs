@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.Linq;
-using System.Net.Sockets;
 using System.Text;
 
 namespace CoffeeShop.Core
@@ -12,7 +10,7 @@ namespace CoffeeShop.Core
         private const string Indentation = "    ";
         private readonly string _newLine = Environment.NewLine;
         private readonly string _verticalWhiteSpace = Environment.NewLine + Environment.NewLine;
-        
+
         public CoffeeShop(Drink drink)
         {
             Drink = drink;
@@ -30,9 +28,6 @@ namespace CoffeeShop.Core
 
         public double IncomeFromDrinks()
         {
-
-            
-
             //general
             var totalGeneral = Customers.Count(p => p.Type == CustomerType.General);
             //employee
@@ -40,14 +35,15 @@ namespace CoffeeShop.Core
             //student
             var totalStudents = Customers.Count(p => p.Type == CustomerType.Student);
             //loyalty
-            var totalLoyalty = Customers.Count(p => p.Type == CustomerType.LoyaltyMember);
+            var totalLoyalty = Customers.Count(p => p.Type == CustomerType.LoyaltyMember && !p.IsUsingLoyaltyPoints);
 
-            var incomeFromDrinks = (totalGeneral * Drink.BasePrice);
-            incomeFromDrinks += (Drink.BasePrice * (Drink.DiscountPrice / 100)) * totalStudents;
-          
-            
-            if((incomeFromDrinks- CostOfDrinks())<50)
-                incomeFromDrinks += (totalEmployee * Drink.BasePrice);
+            var incomeFromDrinks = totalGeneral * Drink.BasePrice;
+            incomeFromDrinks += Drink.BasePrice * (Drink.DiscountPrice / 100) * totalStudents;
+            incomeFromDrinks += totalLoyalty * Drink.BasePrice;
+
+
+            if (incomeFromDrinks - CostOfDrinks() < 50)
+                incomeFromDrinks += totalEmployee * Drink.BasePrice;
 
 
             return incomeFromDrinks;
@@ -61,7 +57,8 @@ namespace CoffeeShop.Core
 
         public double TotalLoyaltyPointsAccrued()
         {
-            return Customers.Where(customer => customer.Type== CustomerType.General ).Sum(customer => Drink.LoyaltyPointsGained);
+            return Customers.Where(customer => customer.Type == CustomerType.LoyaltyMember)
+                .Sum(customer => Drink.LoyaltyPointsGained);
         }
 
         public int TotalCustomers()
@@ -72,7 +69,7 @@ namespace CoffeeShop.Core
         public string GetSummary()
         {
             var totalLoyaltyPointsRedeemed = 0;
-            
+
             foreach (var customer in Customers)
                 if (customer.Type == CustomerType.LoyaltyMember && customer.IsUsingLoyaltyPoints)
                 {
@@ -82,14 +79,13 @@ namespace CoffeeShop.Core
                 }
 
 
-            return BuildSummary( TotalCustomers(), totalLoyaltyPointsRedeemed);
+            return BuildSummary(TotalCustomers(), totalLoyaltyPointsRedeemed);
         }
 
 
         public int BeanCount(int cups)
         {
-
-            return 1000 -( Drink.BeansPerCup * cups);
+            return 1000 - Drink.BeansPerCup * cups;
         }
 
         public string BuildSummary(int totalCustomers, int totalLoyaltyPointsRedeemed)
@@ -133,19 +129,13 @@ namespace CoffeeShop.Core
 
             builder.Append(_verticalWhiteSpace);
 
-            if(profit>20 && BeanCount(Customers.Count)>=250)
-            {
+            if (profit > 20 && BeanCount(Customers.Count) >= 250)
                 builder.Append("Coffee Shop will open tomorrow");
-            }
             else
-            {
                 builder.Append("Coffee Shop will not open tomorrow");
-            }
 
 
-         
             return builder.ToString();
-
         }
     }
 }

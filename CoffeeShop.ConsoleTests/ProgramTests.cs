@@ -12,7 +12,6 @@ namespace CoffeeShop.Console.Tests
         public void Initialize()
         {
             prg = new Program();
-
         }
 
 
@@ -21,7 +20,7 @@ namespace CoffeeShop.Console.Tests
         {
             try
             {
-                prg.SetupData();
+                prg.InputHandler.SetupData();
                 Assert.IsTrue(true);
             }
             catch (Exception e)
@@ -36,16 +35,18 @@ namespace CoffeeShop.Console.Tests
         [TestMethod]
         public void AddLoyaltyTestIncome()
         {
-            prg.AddLoyalty("add loyalty Craig 0 false");
-            var income = prg.IncomeFromDrinks();
+            prg.InputHandler.SetupData();
+            prg.InputHandler.AddLoyalty("add loyalty Craig 0 false");
+            var income = prg.InputHandler.IncomeFromDrinks();
             Assert.AreEqual(income, 100);
         }
 
         [TestMethod]
         public void AddLoyaltyTestCost()
         {
-            prg.AddLoyalty("add loyalty Craig 0 false");
-            var cost = prg.CostOfDrinks();
+            prg.InputHandler.SetupData();
+            prg.InputHandler.AddLoyalty("add loyalty Craig 0 false");
+            var cost = prg.InputHandler.CostOfDrinks();
             Assert.AreEqual(cost, 50);
         }
 
@@ -53,18 +54,18 @@ namespace CoffeeShop.Console.Tests
         [TestMethod]
         public void AddLoyaltyUseLoyaltyTestIncome()
         {
-            prg.SetupData();
-            prg.AddLoyalty("add loyalty Damian 1000 true");
-            var income = prg.IncomeFromDrinks();
-            Assert.AreEqual(income, 100);
+            prg.InputHandler.SetupData();
+            prg.InputHandler.AddLoyalty("add loyalty Damian 1000 true");
+            var income = prg.InputHandler.IncomeFromDrinks();
+            Assert.AreEqual(income, 0);
         }
 
         [TestMethod]
         public void AddLoyaltyUseLoyaltyTestCost()
         {
-            prg.SetupData();
-            prg.AddLoyalty("add loyalty Damian 1000 true");
-            var cost = prg.CostOfDrinks();
+            prg.InputHandler.SetupData();
+            prg.InputHandler.AddLoyalty("add loyalty Damian 1000 true");
+            var cost = prg.InputHandler.CostOfDrinks();
             Assert.AreEqual(cost, 50);
         }
 
@@ -72,38 +73,55 @@ namespace CoffeeShop.Console.Tests
         [TestMethod]
         public void AddGeneralTestIncome()
         {
-            prg.SetupData();
-            prg.AddGeneral();
-            var income = prg.IncomeFromDrinks();
-            Assert.AreEqual(income, 100 * prg.CustomerCount());
+            prg.InputHandler.SetupData();
+            prg.InputHandler.AddGeneral("add general Graeme");
+            var income = prg.InputHandler.IncomeFromDrinks();
+            Assert.AreEqual(income, 100 * prg.InputHandler.CustomerCount());
         }
 
         [TestMethod]
         public void AddGeneralTestCost()
         {
-            prg.SetupData();
-            prg.AddGeneral();
-            var cost = prg.CostOfDrinks();
-            Assert.AreEqual(cost, 50 * prg.CustomerCount());
+            prg.InputHandler.SetupData();
+            prg.InputHandler.AddGeneral("add general Graeme");
+            var cost = prg.InputHandler.CostOfDrinks();
+            Assert.AreEqual(cost, 50 * prg.InputHandler.CustomerCount());
         }
 
 
         [TestMethod]
         public void AddEmployeeTestIncome()
         {
-            prg.SetupData();
-            prg.AddEmployee("Andrzej");
-            var income = prg.IncomeFromDrinks();
-            Assert.AreEqual(income, 100 * prg.CustomerCount());
+            prg.InputHandler.SetupData();
+            prg.InputHandler.AddEmployee("Andrzej");
+            var income = prg.InputHandler.IncomeFromDrinks();
+            Assert.AreEqual(income, 100 * prg.InputHandler.CustomerCount());
         }
 
         [TestMethod]
         public void AddEmployeeTestCost()
         {
-            prg.SetupData();
-            prg.AddEmployee("Andrzej");
-            var cost = prg.CostOfDrinks();
-            Assert.AreEqual(cost, 50 * prg.CustomerCount());
+            prg.InputHandler.SetupData();
+            prg.InputHandler.AddEmployee("Andrzej");
+            var cost = prg.InputHandler.CostOfDrinks();
+            Assert.AreEqual(cost, 50 * prg.InputHandler.CustomerCount());
+        }
+
+        [TestMethod]
+        public void TestProgramOutput()
+        {
+            prg.InputHandler.SetupData();
+
+            prg.InputHandler.AddGeneral("add general Graeme");
+            prg.InputHandler.AddGeneral("add loyalty Damian 1000 true");
+            prg.InputHandler.AddLoyalty("add loyalty Craig 0 false");
+            prg.InputHandler.AddLoyalty("add loyalty Kirsty 60 false");
+            prg.InputHandler.AddEmployee("add employee Andrzej");
+            prg.InputHandler.AddGeneral("add general Matt");
+            prg.InputHandler.AddGeneral("add general Colin");
+
+            var cost = prg.InputHandler.CostOfDrinks();
+            Assert.AreEqual(cost, 350);
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using CoffeeShop.Core;
-using System;
+﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CoffeeShop.Core.Tests
@@ -30,7 +29,7 @@ namespace CoffeeShop.Core.Tests
             }
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void BuildSummaryTest()
         {
             try
@@ -44,8 +43,8 @@ namespace CoffeeShop.Core.Tests
 
                 var coffeeShop = new CoffeeShop(drink);
 
-               var output =  coffeeShop.BuildSummary(1, 0);
-                Assert.IsTrue(output.Length>0);
+                var output = coffeeShop.BuildSummary(1, 0);
+                Assert.IsTrue(output.Length > 0);
             }
             catch (Exception e)
             {
